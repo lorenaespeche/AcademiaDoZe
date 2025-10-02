@@ -30,6 +30,7 @@
                         <TapGestureRecognizer Command="{Binding NavigateToLogradourosCommand}"/>
                     </Border.GestureRecognizers>
                     <StackLayout Spacing="10">
+                        <Label FontFamily="MaterialIcons" Text="&#xea09;" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center" />
                         <Label Text="{Binding TotalLogradouros}" Style="{StaticResource SubHeadline}"/>
                         <Label Text="Logradouros" HorizontalTextAlignment="Center"/>
                     </StackLayout>
@@ -41,6 +42,7 @@
                         <TapGestureRecognizer Command="{Binding NavigateToAlunosCommand}"/>
                     </Border.GestureRecognizers>
                     <StackLayout Spacing="10">
+                        <Label FontFamily="MaterialIcons" Text="&#xe80c;" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center" />
                         <Label Text="{Binding TotalAlunos}" Style="{StaticResource SubHeadline}"/>
                         <Label Text="Alunos" HorizontalTextAlignment="Center"/>
                     </StackLayout>
@@ -52,6 +54,7 @@
                         <TapGestureRecognizer Command="{Binding NavigateToColaboradoresCommand}"/>
                     </Border.GestureRecognizers>
                     <StackLayout Spacing="10">
+                        <Label FontFamily="MaterialIcons" Text="&#xea67;" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center" />
                         <Label Text="{Binding TotalColaboradores}" Style="{StaticResource SubHeadline}"/>
                         <Label Text="Colaboradores" HorizontalTextAlignment="Center"/>
                     </StackLayout>
@@ -63,13 +66,13 @@
                         <TapGestureRecognizer Command="{Binding NavigateToMatriculasCommand}"/>
                     </Border.GestureRecognizers>
                     <StackLayout Spacing="10">
+                        <Label FontFamily="MaterialIcons" Text="&#xe174;" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center" />
                         <Label Text="{Binding TotalMatriculas}" Style="{StaticResource SubHeadline}"/>
                         <Label Text="Matrículas" HorizontalTextAlignment="Center"/>
                     </StackLayout>
                 </Border>
-
             </Grid>
-
+            
             <!-- Loading Indicator -->
             <ActivityIndicator Grid.Row="0" Grid.RowSpan="2"
                                IsVisible="{Binding IsBusy}"

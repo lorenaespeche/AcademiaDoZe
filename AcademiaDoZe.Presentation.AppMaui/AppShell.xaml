@@ -5,14 +5,34 @@ xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 xmlns:views="clr-namespace:AcademiaDoZe.Presentation.AppMaui.Views"
 Title="Academia do Zé">
+
     <!--
 <ShellContentTitle="Home" ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage" />
--->
+    -->
+    
     <FlyoutItem Title="Dashboard">
+        <!-- Icon="home_icon.png" -->
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="MaterialIcons" Glyph="&#xe9b0;"/>
+        </FlyoutItem.Icon>
         <ShellContent ContentTemplate="{DataTemplate views:DashboardListPage}" Route="dashboard" />
     </FlyoutItem>
+    
     <FlyoutItem Title="Logradouros">
+        <!-- Icon="location_icon.png" -->
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="MaterialIcons" Glyph="&#xea09;" />
+        </FlyoutItem.Icon>
         <ShellContent ContentTemplate="{DataTemplate views:LogradouroListPage}" Route="logradouros" />
+    </FlyoutItem>
+    
+    
+    <FlyoutItem Title="Configurações">
+        <!-- Icon="settings_icon.png" -->
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="MaterialIcons" Glyph="&#xe8b8;"/>
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate views:ConfigPage}" Route="configuracoes"/>
     </FlyoutItem>
     <!--
 <TabBar>
