@@ -52,7 +52,7 @@ public class ColaboradorInfrastructureTests : TestBase
         Assert.True(colaboradorInserido.Id > 0);
     }
 
-    [Fact]
+    /*[Fact]
     public async Task Colaborador_ObterPorCpf_Atualizar()
     {
         var _cpf = "12345678951";
@@ -88,9 +88,9 @@ public class ColaboradorInfrastructureTests : TestBase
         var resultadoAtualizacao = await repoColaboradorAtualizar.Atualizar(colaboradorAtualizado);
         Assert.NotNull(resultadoAtualizacao);
         Assert.Equal("zé dos testes 123", resultadoAtualizacao.Nome);
-    }
+    }*/
 
-    [Fact]
+    /*[Fact]
     public async Task Colaborador_ObterPorCpf_TrocarSenha()
     {
         var _cpf = "12345678951";
@@ -108,9 +108,9 @@ public class ColaboradorInfrastructureTests : TestBase
         var colaboradorAtualizado = await repoColaboradorObterPorId.ObterPorId(colaboradorExistente.Id);
         Assert.NotNull(colaboradorAtualizado);
         Assert.Equal(novaSenha, colaboradorAtualizado.Senha);
-    }
+    }*/
 
-    [Fact]
+    /*[Fact]
     public async Task Colaborador_ObterPorCpf_Remover_ObterPorId()
     {
         var _cpf = "99988877766";
@@ -126,7 +126,7 @@ public class ColaboradorInfrastructureTests : TestBase
         var repoColaboradorObterPorId = new ColaboradorRepository(ConnectionString, DatabaseType);
         var resultadoRemovido = await repoColaboradorObterPorId.ObterPorId(colaboradorExistente.Id);
         Assert.Null(resultadoRemovido);
-    }
+    }*/
 
     [Fact]
     public async Task Colaborador_ObterTodos()

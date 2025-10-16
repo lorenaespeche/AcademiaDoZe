@@ -118,11 +118,9 @@ public partial class ColaboradorListViewModel : BaseViewModel
             }
             else if (SelectedFilterType == "CPF")
             {
-                var colaborador = await _colaboradorService.ObterPorCpfAsync(SearchText);
-
-                if (colaborador != null)
-
-                    resultados = new[] { colaborador };
+                // ObterPorCpfAsync agora retorna IEnumerable<ColaboradorDTO>
+                var colaboradores = await _colaboradorService.ObterPorCpfAsync(SearchText) ?? Enumerable.Empty<ColaboradorDTO>();
+                resultados = colaboradores;
             }
 
             // atualiza a coleção na thread principal
