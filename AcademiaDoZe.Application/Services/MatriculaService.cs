@@ -23,7 +23,7 @@ public class MatriculaService : IMatriculaService
         if (idExistente != null)
 
         {
-            throw new InvalidOperationException($"Matricula com ID {idExistente.Id}, já cadastrado com o Id {idExistente.Id}.");
+            throw new InvalidOperationException($"Matrícula com ID {idExistente.Id}, já cadastrado com o Id {idExistente.Id}.");
         }
 
         // cria a entidade de domínio a partir do DTO

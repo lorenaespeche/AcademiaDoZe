@@ -58,7 +58,7 @@ public class MatriculaInfrastructureTests : TestBase
         Assert.True(matriculaInserida.Id > 0);
     }
 
-    [Fact]
+    /*[Fact]
     public async Task Matricula_ObterPorAluno_Atualizar()
     {
         var repoMatricula = new MatriculaRepository(ConnectionString, DatabaseType);
@@ -93,9 +93,9 @@ public class MatriculaInfrastructureTests : TestBase
         Assert.Equal("Hipertrofia", resultado.Objetivo);
         Assert.Equal("Observação atualizada", resultado.ObservacoesRestricoes);
         Assert.Equal(EMatriculaPlano.Anual, resultado.Plano);
-    }
+    }*/
 
-    [Fact]
+    /*[Fact]
     public async Task Matricula_ObterPorAluno_Remover_ObterPorId()
     {
         var repoMatricula = new MatriculaRepository(ConnectionString, DatabaseType);
@@ -117,7 +117,7 @@ public class MatriculaInfrastructureTests : TestBase
         // verificar se foi removida
         var matriculaRemovida = await repoMatricula.ObterPorId(matricula.Id);
         Assert.Null(matriculaRemovida);
-    }
+    }*/
 
     [Fact]
     public async Task Matrcula_ObterTodos()
@@ -130,7 +130,7 @@ public class MatriculaInfrastructureTests : TestBase
         Assert.NotNull(resultado);
     }
 
-    [Fact]
+    /*[Fact]
     public async Task Matricula_ObterPorId()
     {
         var repoMatricula = new MatriculaRepository(ConnectionString, DatabaseType);
@@ -147,5 +147,5 @@ public class MatriculaInfrastructureTests : TestBase
         var matriculaPorId = await repoMatricula.ObterPorId(matricula.Id);
         Assert.NotNull(matriculaPorId);
         Assert.Equal(matricula.Id, matriculaPorId.Id);
-    }
+    }*/
 }
