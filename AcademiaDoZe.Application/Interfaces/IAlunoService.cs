@@ -11,7 +11,9 @@ public interface IAlunoService
     Task<AlunoDTO> AdicionarAsync(AlunoDTO alunoDto);
     Task<AlunoDTO> AtualizarAsync(AlunoDTO alunoDto);
     Task<bool> RemoverAsync(int id);
-    Task<AlunoDTO> ObterPorCpfAsync(string cpf);
+    // Task<AlunoDTO> ObterPorCpfAsync(string cpf);
     Task<bool> CpfJaExisteAsync(string cpf, int? id = null);
     Task<bool> TrocarSenhaAsync(int id, string novaSenha);
+    // nova versão, retorna múltiplos colaboradores que correspondem ao prefixo de CPF
+    Task<IEnumerable<AlunoDTO>> ObterPorCpfAsync(string cpf);
 }

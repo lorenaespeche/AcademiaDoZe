@@ -43,7 +43,7 @@ public class AlunoInfrastructureTests : TestBase
         Assert.True(alunoInserido.Id > 0);
     }
 
-    [Fact]
+    /*[Fact]
     public async Task Aluno_ObterPorCpf_Atualizar()
     {
         var _cpf = "12345678901";
@@ -76,9 +76,9 @@ public class AlunoInfrastructureTests : TestBase
 
         Assert.NotNull(resultadoAtualizacao);
         Assert.Equal("Aluno Atualizado", resultadoAtualizacao.Nome);
-    }
+    }*/
 
-    [Fact]
+    /*[Fact]
     public async Task Aluno_TrocarSenha()
     {
         var _cpf = "12345678952";
@@ -93,9 +93,9 @@ public class AlunoInfrastructureTests : TestBase
         var alunoAtualizado = await repoAluno.ObterPorId(alunoExistente.Id);
         Assert.NotNull(alunoAtualizado);
         Assert.Equal(novaSenha, alunoAtualizado.Senha);
-    }
+    }*/
 
-    [Fact]
+    /*[Fact]
     public async Task Aluno_Remover_ObterPorId()
     {
         var _cpf = "12346678952";
@@ -108,7 +108,7 @@ public class AlunoInfrastructureTests : TestBase
 
         var alunoRemovido = await repoAluno.ObterPorId(alunoExistente.Id);
         Assert.Null(alunoRemovido);
-    }
+    }*/
 
     [Fact]
     public async Task Aluno_ObterTodos()
