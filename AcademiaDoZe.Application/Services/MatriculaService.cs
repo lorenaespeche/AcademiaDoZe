@@ -1,16 +1,14 @@
-﻿// Lorena Espeche
-
-using AcademiaDoZe.Application.DTOs;
+﻿using AcademiaDoZe.Application.DTOs;
 using AcademiaDoZe.Application.Interfaces;
 using AcademiaDoZe.Application.Mappings;
 using AcademiaDoZe.Domain.Repositories;
-using AcademiaDoZe.Infrastructure.Repositories;
 
-namespace AcademiaDoZe.Application_.Services;
+namespace AcademiaDoZe.Application.Services;
 
 public class MatriculaService : IMatriculaService
 {
     private readonly Func<IMatriculaRepository> _repoFactory;
+
     public MatriculaService(Func<IMatriculaRepository> repoFactory)
     {
         _repoFactory = repoFactory ?? throw new ArgumentNullException(nameof(repoFactory));
@@ -18,43 +16,33 @@ public class MatriculaService : IMatriculaService
 
     public async Task<MatriculaDTO> AdicionarAsync(MatriculaDTO matriculaDto)
     {
-        // verifica se já existe uma matricula com o mesmo Id
         var idExistente = await _repoFactory().ObterPorId(matriculaDto.Id);
         if (idExistente != null)
-
         {
             throw new InvalidOperationException($"Matrícula com ID {idExistente.Id}, já cadastrado com o Id {idExistente.Id}.");
         }
-
-        // cria a entidade de domínio a partir do DTO
         var matricula = matriculaDto.ToEntity();
-        // aalva no repositório
         await _repoFactory().Adicionar(matricula);
-        // converte e retorna o DTO - já com o ID gerado, setado pelo repositório
         return matricula.ToDto();
-
     }
 
     public async Task<MatriculaDTO> AtualizarAsync(MatriculaDTO matriculaDto)
     {
-        // verifica se a matricula existe
-        var matriculaExistente = await _repoFactory().ObterPorId(matriculaDto.Id) ?? throw new KeyNotFoundException($"Matricula ID {matriculaDto.Id} não encontrado.");
+        var matriculaExistente = await _repoFactory().ObterPorId(matriculaDto.Id)
+            ?? throw new KeyNotFoundException($"Matrícula ID {matriculaDto.Id} não encontrado.");
 
-        // verifica se o novo ID já está em uso por outra matricula
         if (!string.Equals(matriculaExistente.Id.ToString(), matriculaDto.Id.ToString(), StringComparison.OrdinalIgnoreCase))
         {
             var idExistente = await _repoFactory().ObterPorId(matriculaDto.Id);
             if (idExistente != null && idExistente.Id != matriculaDto.Id)
             {
-                throw new InvalidOperationException($"Matricula com ID {idExistente.Id}, já cadastrado com o Id {idExistente.Id}.");
+                throw new InvalidOperationException($"Matrícula com ID {idExistente.Id}, já cadastrado com o Id {idExistente.Id}.");
             }
         }
-        // a partir dos dados do dto e do existente, cria uma nova instância com os valores atualizados
 
-        // respeitando o principio de Imutabilidade, onde a entidade original não é modificada, mas sim uma nova instância é criada com os dados atualizados
         var matriculaAtualizado = matriculaExistente.UpdateFromDto(matriculaDto);
-        // atualiza no repositório
         await _repoFactory().Atualizar(matriculaAtualizado);
+
         return matriculaAtualizado.ToDto();
     }
 
@@ -67,7 +55,7 @@ public class MatriculaService : IMatriculaService
     public async Task<IEnumerable<MatriculaDTO>> ObterTodasAsync()
     {
         var matriculas = await _repoFactory().ObterTodos();
-        return [.. matriculas.Select(l => l.ToDto())]; // expressão de interpolação para criar uma nova lista de DTOs
+        return [.. matriculas.Select(l => l.ToDto())];
     }
 
     public async Task<IEnumerable<MatriculaDTO>> ObterPorAlunoIdAsync(int alunoId)
@@ -95,7 +83,18 @@ public class MatriculaService : IMatriculaService
         {
             return false;
         }
+
         await _repoFactory().Remover(id);
         return true;
+    }
+
+    Task<MatriculaDTO> IMatriculaService.ObterPorAlunoIdAsync(int alunoId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<MatriculaDTO> ObterPorAlunoCpfAsync(string cpf)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -11,7 +11,8 @@ public interface IMatriculaService
     Task<MatriculaDTO> AdicionarAsync(MatriculaDTO matriculaDto);
     Task<MatriculaDTO> AtualizarAsync(MatriculaDTO matriculaDto);
     Task<bool> RemoverAsync(int id);
-    Task<IEnumerable<MatriculaDTO>> ObterPorAlunoIdAsync(int alunoId);
+    Task<MatriculaDTO> ObterPorAlunoIdAsync(int alunoId);
+    Task<MatriculaDTO> ObterPorAlunoCpfAsync(string cpf);
     Task<IEnumerable<MatriculaDTO>> ObterAtivasAsync(int alunoId = 0);
     Task<IEnumerable<MatriculaDTO>> ObterVencendoEmDiasAsync(int dias);
 }

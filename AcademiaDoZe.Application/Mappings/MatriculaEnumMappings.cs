@@ -26,4 +26,18 @@ public static class MatriculaEnumMappings
     {
         return (EAppMatriculaRestricoes)domainRestricoes;
     }
+
+    public static EMatriculaRestricoes ToDomain(this EAppMatriculaRestricoes? appRestricoes)
+    {
+        return appRestricoes.HasValue
+            ? (EMatriculaRestricoes)appRestricoes.Value
+            : EMatriculaRestricoes.None;
+    }
+
+    public static EAppMatriculaRestricoes ToApp(this EMatriculaRestricoes? domainRestricoes)
+    {
+        return domainRestricoes.HasValue
+            ? (EAppMatriculaRestricoes)domainRestricoes.Value
+            : EAppMatriculaRestricoes.None;
+    }
 }

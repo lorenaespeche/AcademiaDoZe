@@ -45,7 +45,6 @@ public class MatriculaApplicationTests
             Assert.Fail("Foto de teste não encontrada.");
         }
 
-        // monta o aluno (igual ao seu estilo)
         var dtoAluno = new AlunoDTO
         {
             Nome = "Aluno Teste",
@@ -65,15 +64,12 @@ public class MatriculaApplicationTests
 
         try
         {
-            // 1) Persiste o ALUNO primeiro (evita erro de FK)
             alunoCriado = await alunoService.AdicionarAsync(dtoAluno);
             Assert.NotNull(alunoCriado);
             Assert.True(alunoCriado!.Id > 0);
 
-            // 2) Prepara LaudoMedico com bytes válidos (requerido porque há restrição médica != None)
             var laudo = new ArquivoDTO { Conteudo = new byte[] { 1, 2, 3 } };
 
-            // 3) Cria a MATRÍCULA referenciando o aluno já persistido (não fixe Id; deixe 0/default)
             var dtoMatricula = new MatriculaDTO
             {
                 Id = 1000,
@@ -92,12 +88,12 @@ public class MatriculaApplicationTests
             Assert.NotNull(matriculaCriada);
             Assert.True(matriculaCriada!.Id > 0);
 
-            // Act - Obter por Id retornado
+            // Act
             var obtida = await matriculaService.ObterPorIdAsync(matriculaCriada.Id);
             Assert.NotNull(obtida);
             Assert.Equal("Emagrecer", obtida!.Objetivo);
 
-            // Act - Atualizar (mantendo Laudo para não quebrar regra de domínio)
+            // Act
             var atualizarDto = new MatriculaDTO
             {
                 Id = obtida.Id,
@@ -108,14 +104,14 @@ public class MatriculaApplicationTests
                 Objetivo = "Hipertrofia",
                 RestricoesMedicas = Enums.EAppMatriculaRestricoes.Diabetes,
                 ObservacoesRestricoes = "Nenhuma",
-                LaudoMedico = obtida.LaudoMedico // mantém laudo
+                LaudoMedico = obtida.LaudoMedico
             };
 
             var atualizado = await matriculaService.AtualizarAsync(atualizarDto);
             Assert.NotNull(atualizado);
             Assert.Equal("Hipertrofia", atualizado!.Objetivo);
 
-            // Act - Remover
+            // act
             var removido = await matriculaService.RemoverAsync(atualizado.Id);
             Assert.True(removido);
 
@@ -124,7 +120,6 @@ public class MatriculaApplicationTests
         }
         finally
         {
-            // Clean-up defensivo
             if (matriculaCriada is not null)
             {
                 try { await matriculaService.RemoverAsync(matriculaCriada.Id); } catch { }
@@ -137,7 +132,7 @@ public class MatriculaApplicationTests
         }
     }
 
-    // Helper simples para gerar um CPF numérico de 11 dígitos
+    // helper simples para gerar um CPF numérico de 11 dígitos
     private static string GerarCpfFake()
     {
         var rnd = new Random();

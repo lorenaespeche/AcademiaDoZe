@@ -1,6 +1,4 @@
-﻿// Lorena Espeche
-
-using AcademiaDoZe.Domain.Entities;
+﻿using AcademiaDoZe.Domain.Entities;
 using AcademiaDoZe.Domain.Enums;
 using AcademiaDoZe.Domain.Repositories;
 using AcademiaDoZe.Domain.ValueObjects;
@@ -17,11 +15,11 @@ public class MatriculaRepository : BaseRepository<Matricula>, IMatriculaReposito
     {
         try
         {
-            // obtém o aluno de forma assíncrona
+            // obtém o aluno
             var alunoId = Convert.ToInt32(reader["aluno_id"]);
             var alunoRepository = new AlunoRepository(_connectionString, _databaseType);
             var aluno = await alunoRepository.ObterPorId(alunoId) ?? throw new InvalidOperationException($"Aluno com ID {alunoId} não encontrado.");
-            // cria o objeto Matricula usando o método de fábrica
+            
             var matricula = Matricula.Criar(
                 id: Convert.ToInt32(reader["id_matricula"]),
                 alunoMatricula: aluno,
@@ -33,13 +31,12 @@ public class MatriculaRepository : BaseRepository<Matricula>, IMatriculaReposito
                 laudoMedico: reader["laudo_medico"] is DBNull ? null : Arquivo.Criar((byte[])reader["laudo_medico"]),
                 observacoesRestricoes: reader["obs_restricao"]?.ToString() ?? string.Empty
             );
-            // define o ID usando reflection
             var idProperty = typeof(Entity).GetProperty("Id");
             idProperty?.SetValue(matricula, Convert.ToInt32(reader["id_matricula"]));
 
             return matricula;
         }
-        catch (DbException ex) { throw new InvalidOperationException($"Erro ao mapear dados do colaborador: {ex.Message}", ex); }
+        catch (DbException ex) { throw new InvalidOperationException($"Erro ao mapear dados: {ex.Message}", ex); }
     }
 
     public override async Task<Matricula> Adicionar(Matricula entity)
@@ -48,7 +45,7 @@ public class MatriculaRepository : BaseRepository<Matricula>, IMatriculaReposito
         {
             await using var connection = await GetOpenConnectionAsync();
             string query = _databaseType == DatabaseType.SqlServer
-            ? $"INSERT INTO {TableName} (aluno_id, plano, data_inicio, data_fim, objetivo, restricao_medica, laudo_medico, obs_restricao) "
+            ? $"INSERT INTO {TableName} (aluno_i, plano, data_inicio, data_fim, objetivo, restricao_medica, laudo_medico, obs_restricao) "
             + "OUTPUT INSERTED.id_matricula "
             + "VALUES (@Aluno, @Plano, @Data_inicio, @Data_fim, @Objetivo, @Restricoes_medicas, @Laudo_medico, @Observacoes_restricoes);"
             : $"INSERT INTO {TableName} (aluno_id, plano, data_inicio, data_fim, objetivo, restricao_medica, laudo_medico, obs_restricao) "
@@ -56,7 +53,6 @@ public class MatriculaRepository : BaseRepository<Matricula>, IMatriculaReposito
             + "SELECT LAST_INSERT_ID();";
             await using var command = DbProvider.CreateCommand(query, connection);
             command.Parameters.Add(DbProvider.CreateParameter("@Aluno", entity.AlunoMatricula.Id, DbType.String, _databaseType));
-            //command.Parameters.Add(DbProvider.CreateParameter("@Colaborador", 1, DbType.String, _databaseType));
             command.Parameters.Add(DbProvider.CreateParameter("@Plano", (int)entity.Plano, DbType.String, _databaseType));
             command.Parameters.Add(DbProvider.CreateParameter("@Data_inicio", entity.DataInicio.ToString("yyyy-MM-dd"), DbType.String, _databaseType));
             command.Parameters.Add(DbProvider.CreateParameter("@Data_fim", entity.DataFim.ToString("yyyy-MM-dd"), DbType.String, _databaseType));
@@ -67,13 +63,12 @@ public class MatriculaRepository : BaseRepository<Matricula>, IMatriculaReposito
             var id = await command.ExecuteScalarAsync();
             if (id != null && id != DBNull.Value)
             {
-                // define o ID usando reflection
                 var idProperty = typeof(Entity).GetProperty("Id");
                 idProperty?.SetValue(entity, Convert.ToInt32(id));
             }
             return entity;
         }
-        catch (DbException ex) { throw new InvalidOperationException($"Erro ao adicionar matricula: {ex.Message}", ex); }
+        catch (DbException ex) { throw new InvalidOperationException($"Erro ao adicionar matrícula: {ex.Message}", ex); }
     }
 
     public override async Task<Matricula> Atualizar(Matricula entity)
@@ -83,7 +78,6 @@ public class MatriculaRepository : BaseRepository<Matricula>, IMatriculaReposito
             await using var connection = await GetOpenConnectionAsync();
             string query = $"UPDATE {TableName} "
             + "SET aluno_id = @Aluno, "
-            //+ "colaborador_id = @Colaborador,"
             + "plano = @Plano, "
             + "data_inicio = @Data_inicio, "
             + "data_fim = @Data_fim, "
@@ -94,7 +88,6 @@ public class MatriculaRepository : BaseRepository<Matricula>, IMatriculaReposito
             + "WHERE id_matricula = @Id";
             await using var command = DbProvider.CreateCommand(query, connection);
             command.Parameters.Add(DbProvider.CreateParameter("@Aluno", entity.AlunoMatricula.Id, DbType.String, _databaseType));
-            //command.Parameters.Add(DbProvider.CreateParameter("@Colaborador", 1, DbType.String, _databaseType));
             command.Parameters.Add(DbProvider.CreateParameter("@Plano", (int)entity.Plano, DbType.String, _databaseType));
             command.Parameters.Add(DbProvider.CreateParameter("@Data_inicio", entity.DataInicio.ToString("yyyy-MM-dd"), DbType.String, _databaseType));
             command.Parameters.Add(DbProvider.CreateParameter("@Data_fim", entity.DataFim.ToString("yyyy-MM-dd"), DbType.String, _databaseType));
@@ -106,13 +99,13 @@ public class MatriculaRepository : BaseRepository<Matricula>, IMatriculaReposito
             int rowsAffected = await command.ExecuteNonQueryAsync();
             if (rowsAffected == 0)
             {
-                throw new InvalidOperationException($"Nenhuma matricula encontrado com o ID {entity.Id} para atualização.");
+                throw new InvalidOperationException($"Nenhuma matrícula encontrado com o ID {entity.Id} para atualização.");
             }
             return entity;
         }
         catch (DbException ex)
         {
-            throw new InvalidOperationException($"Erro ao atualizar matrcula com ID {entity.Id}: {ex.Message}", ex);
+            throw new InvalidOperationException($"Erro ao atualizar matrícula com ID {entity.Id}: {ex.Message}", ex);
         }
     }
 
@@ -126,7 +119,6 @@ public class MatriculaRepository : BaseRepository<Matricula>, IMatriculaReposito
 
             await using var command = DbProvider.CreateCommand(query, connection);
 
-            // adiciona o parâmetro com a data atual
             var param = command.CreateParameter();
             param.ParameterName = "@Hoje";
             param.Value = DateTime.Today;
@@ -134,7 +126,6 @@ public class MatriculaRepository : BaseRepository<Matricula>, IMatriculaReposito
 
             using var reader = await command.ExecuteReaderAsync();
 
-            // verifica se há registros e mapeia
             var resultados = new List<Matricula>();
             while (await reader.ReadAsync())
             {
@@ -145,27 +136,33 @@ public class MatriculaRepository : BaseRepository<Matricula>, IMatriculaReposito
         }
         catch (DbException ex)
         {
-            throw new InvalidOperationException($"Erro ao obter matriculas ativas: {ex.Message}", ex);
+            throw new InvalidOperationException($"Erro ao obter matrículas ativas: {ex.Message}", ex);
         }
     }
 
-    public async Task<IEnumerable<Matricula>?> ObterPorAluno(int alunoId)
+    public async Task<Matricula?> ObterPorAluno(int alunoId)
     {
         try
         {
             await using var connection = await GetOpenConnectionAsync();
             string query = $"SELECT * FROM {TableName} WHERE aluno_id = @Aluno";
+
             await using var command = DbProvider.CreateCommand(query, connection);
             command.Parameters.Add(DbProvider.CreateParameter("@Aluno", alunoId, DbType.String, _databaseType));
+
             using var reader = await command.ExecuteReaderAsync();
-            var resultados = new List<Matricula>();
-            while (await reader.ReadAsync())
+
+            if (await reader.ReadAsync())
             {
-                resultados.Add(await MapAsync(reader));
+                return await MapAsync(reader);
             }
-            return resultados;
+
+            return null; 
         }
-        catch (DbException ex) { throw new InvalidOperationException($"Erro ao obter matricula pelo Aluno de Id {alunoId}: {ex.Message}", ex); }
+        catch (DbException ex)
+        {
+            throw new InvalidOperationException($"Erro ao obter matrícula pelo Aluno de Id {alunoId}: {ex.Message}", ex);
+        }
     }
 
     public async Task<IEnumerable<Matricula>> ObterVencendoEmDias(int dias)
@@ -204,5 +201,10 @@ public class MatriculaRepository : BaseRepository<Matricula>, IMatriculaReposito
         {
             throw new InvalidOperationException($"Erro ao obter matrículas vencendo em {dias} dias: {ex.Message}", ex);
         }
+    }
+
+    public Task<Matricula> ObterPorAlunoCpf(string cpf)
+    {
+        throw new NotImplementedException();
     }
 }

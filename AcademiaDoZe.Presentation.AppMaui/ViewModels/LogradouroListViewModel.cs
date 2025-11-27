@@ -2,6 +2,7 @@
 using AcademiaDoZe.Application.Interfaces;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+
 namespace AcademiaDoZe.Presentation.AppMaui.ViewModels;
 
 public partial class LogradouroListViewModel : BaseViewModel
