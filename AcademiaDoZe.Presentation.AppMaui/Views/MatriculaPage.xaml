@@ -15,10 +15,9 @@
     </ContentPage.Resources>
     <ScrollView>
         <StackLayout Spacing="20">
+            
             <!-- CPF Section -->
-
             <Border Style="{StaticResource CardBorder}" Margin="15,10">
-
                 <StackLayout Spacing="5">
                     <Label Text="CPF"/>
                     <Grid ColumnDefinitions="*,Auto">
@@ -31,10 +30,9 @@
                     </Grid>
                 </StackLayout>
             </Border>
+            
             <!-- Dados Pessoais -->
-
             <Border Style="{StaticResource CardBorder}" Margin="15,10">
-
                 <StackLayout Spacing="15">
                     <StackLayout Orientation="Horizontal">
                         <Label Text="Aluno Selecionado:"/>

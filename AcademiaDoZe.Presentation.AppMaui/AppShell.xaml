@@ -45,7 +45,7 @@ Title="Academia do Zé">
     <FlyoutItem Title="Matrículas">
         <!-- Icon="location_icon.png" -->
         <FlyoutItem.Icon>
-            <FontImageSource FontFamily="MaterialIcons" Glyph="&#xea09;" />
+            <FontImageSource FontFamily="MaterialIcons" Glyph="&#xe174;" />
         </FlyoutItem.Icon>
         <ShellContent ContentTemplate="{DataTemplate views:MatriculaListPage}" Route="matriculas" />
     </FlyoutItem>
