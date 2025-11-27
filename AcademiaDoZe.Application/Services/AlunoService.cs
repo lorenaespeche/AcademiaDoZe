@@ -83,7 +83,7 @@ public class AlunoService : IAlunoService
     }
 
     // nova versão, retorna uma coleção de AlunoDTO - pode ser vazia
-    public async Task<IEnumerable<AlunoDTO>> ObterPorCpfAsync(string cpf)
+    public async Task<AlunoDTO> ObterPorCpfAsync(string cpf)
     {
         if (string.IsNullOrWhiteSpace(cpf))
             throw new ArgumentException("CPF não pode ser vazio.", nameof(cpf));
@@ -92,10 +92,10 @@ public class AlunoService : IAlunoService
         cpf = new string(cpf.Where(char.IsDigit).ToArray());
         
         // busca no repositório (já faz LIKE por prefixo)
-        var alunos = await _repoFactory().ObterPorCpf(cpf) ?? Enumerable.Empty<Domain.Entities.Aluno>();
+        var aluno = await _repoFactory().ObterPorCpf(cpf);
 
         // mapeia para DTOs e retorna
-        return alunos.Select(c => c.ToDto());
+        return (aluno != null) ? aluno.ToDto() : null;
     }
 
     public async Task<bool> CpfJaExisteAsync(string cpf, int? id = null)

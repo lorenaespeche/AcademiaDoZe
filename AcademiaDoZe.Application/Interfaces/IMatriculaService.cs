@@ -1,6 +1,7 @@
 ﻿// Lorena Espeche
 
 using AcademiaDoZe.Application.DTOs;
+using AcademiaDoZe.Domain.Entities;
 
 namespace AcademiaDoZe.Application.Interfaces;
 

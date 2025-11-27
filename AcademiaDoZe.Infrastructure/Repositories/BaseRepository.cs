@@ -68,7 +68,7 @@ public abstract class BaseRepository<TEntity> : IRepository<TEntity>, IAsyncDisp
     #region métodos de uso geral, não dependem de dados específicos de cada entidade
     public virtual async Task<TEntity?> ObterPorId(int id)
     {
-        if (id <= 0) { throw new ArgumentException("ID_NAO_INFORMADO_MENOR_UM", nameof(id)); }
+        if (id < 0) { throw new ArgumentException("ID_NAO_INFORMADO_MENOR_UM", nameof(id)); }
         try
         {
             await using var connection = await GetOpenConnectionAsync();

@@ -156,35 +156,16 @@ public partial class AlunoViewModel : BaseViewModel
 
             // normaliza para apenas dígitos (o repositório espera dígitos)
             var cpfNormalized = new string(Aluno.Cpf.Where(char.IsDigit).ToArray());
-            var resultados = (await _alunoService.ObterPorCpfAsync(cpfNormalized))?.ToList() ?? new List<AlunoDTO>();
-            if (!resultados.Any())
+            var resultados = (await _alunoService.ObterPorCpfAsync(cpfNormalized));
+            if (resultados == null)
             {
                 await Shell.Current.DisplayAlert("Aviso", "CPF não encontrado.", "OK"); return;
             }
-            if (resultados.Count == 1)
+            if (resultados != null)
             {
-                Aluno = resultados.First();
+                Aluno = resultados;
                 IsEditMode = true;
                 await Shell.Current.DisplayAlert("Aviso", "Aluno já cadastrado! Dados carregados para edição.", "OK"); return;
-            }
-
-            // múltiplos resultados -> perguntar ao usuário qual selecionar
-            var options = resultados.Select(c => $"{c.Id} - {c.Nome} ({c.Cpf})").ToArray();
-            var escolha = await Shell.Current.DisplayActionSheet("Vários alunos encontrados", "Cancelar", null, options);
-            if (string.IsNullOrWhiteSpace(escolha) || escolha == "Cancelar")
-                return;
-
-            // extrai ID a partir da string selecionada ("{Id} - ...")
-            var idStr = escolha.Split('-', 2).FirstOrDefault()?.Trim();
-            if (int.TryParse(idStr, out var selId))
-            {
-                var selecionado = resultados.FirstOrDefault(c => c.Id == selId);
-                if (selecionado != null)
-                {
-                    Aluno = selecionado;
-                    IsEditMode = true;
-                    await Shell.Current.DisplayAlert("Aviso", "Aluno selecionado: dados carregados para edição.", "OK");
-                }
             }
         }
         catch (Exception ex) { await Shell.Current.DisplayAlert("Erro", $"Erro ao buscar CPF: {ex.Message}", "OK"); }

@@ -80,7 +80,7 @@ public class AlunoRepository : BaseRepository<Aluno>, IAlunoRepository
     }
 
     // nova versão, que busca por prefixo do CPF, retornando múltiplos resultados
-    public async Task<IEnumerable<Aluno>> ObterPorCpf(string cpfPrefix)
+    public async Task<Aluno?> ObterPorCpf(string cpfPrefix)
     {
         try
         {
@@ -92,12 +92,8 @@ public class AlunoRepository : BaseRepository<Aluno>, IAlunoRepository
             var parameterValue = (cpfPrefix ?? string.Empty).Trim() + "%";
             command.Parameters.Add(DbProvider.CreateParameter("@CpfPrefix", parameterValue, DbType.String, _databaseType));
             await using var reader = await command.ExecuteReaderAsync();
-            var alunos = new List<Aluno>();
-            while (await reader.ReadAsync())
-            {
-                alunos.Add(await MapAsync(reader));
-            }
-            return alunos;
+            return await reader.ReadAsync() ? await MapAsync(reader) : null;
+
         }
         catch (DbException ex)
         {

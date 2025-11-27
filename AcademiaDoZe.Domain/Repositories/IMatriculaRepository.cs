@@ -10,4 +10,5 @@ public interface IMatriculaRepository : IRepository<Matricula>
     Task<IEnumerable<Matricula>> ObterAtivas(int alunoId = 0);
     Task<IEnumerable<Matricula>> ObterVencendoEmDias(int dias);
     Task<Matricula> ObterPorAlunoCpf(string cpf);
+    Task ObterPorAlunoId(int alunoId);
 }

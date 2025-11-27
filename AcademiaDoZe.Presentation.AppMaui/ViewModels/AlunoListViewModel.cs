@@ -3,6 +3,7 @@ using AcademiaDoZe.Application.Interfaces;
 using AcademiaDoZe.Application.Services;
 using AcademiaDoZe.Domain.Entities;
 using CommunityToolkit.Mvvm.Input;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace AcademiaDoZe.Presentation.AppMaui.ViewModels;
@@ -117,8 +118,8 @@ public partial class AlunoListViewModel : BaseViewModel
             else if (SelectedFilterType == "CPF")
             {
                 // ObterPorCpfAsync agora retorna IEnumerable<AlunoDTO>
-                var alunos = await _alunoService.ObterPorCpfAsync(SearchText) ?? Enumerable.Empty<AlunoDTO>();
-                resultados = alunos;
+                var alunos = await _alunoService.ObterPorCpfAsync(SearchText);
+                resultados =  new[] { alunos };
             }
 
             // atualiza a coleção na thread principal

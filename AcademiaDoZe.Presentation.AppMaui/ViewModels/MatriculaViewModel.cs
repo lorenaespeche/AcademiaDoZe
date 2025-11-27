@@ -1,7 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using AcademiaDoZe.Domain.Entities;
-using AcademiaDoZe.Domain.Enums;
-using AcademiaDoZe.Domain.Repositories;
 using AcademiaDoZe.Application.DTOs;
 using AcademiaDoZe.Application.Enums;
 using AcademiaDoZe.Application.Interfaces;
@@ -15,7 +12,9 @@ public partial class MatriculaViewModel : BaseViewModel
 {
     private readonly IMatriculaService _matriculaService;
     private readonly IAlunoService _alunoService;
+
     public IEnumerable<EAppMatriculaPlano> MatriculaPlanos { get; } = Enum.GetValues(typeof(EAppMatriculaPlano)).Cast<EAppMatriculaPlano>();
+    
     private MatriculaDTO _matricula = new()
     {
         AlunoMatricula = new AlunoDTO
@@ -35,34 +34,42 @@ public partial class MatriculaViewModel : BaseViewModel
         ObservacoesRestricoes = string.Empty,
         LaudoMedico = null
     };
+
     public MatriculaDTO Matricula
     {
         get => _matricula;
         set => SetProperty(ref _matricula, value);
     }
+
     private int _matriculaId;
+
     public int MatriculaId
     {
         get => _matriculaId;
         set => SetProperty(ref _matriculaId, value);
     }
+
     private bool _isEditMode;
+
     public bool IsEditMode
     {
         get => _isEditMode;
         set => SetProperty(ref _isEditMode, value);
     }
+
     public MatriculaViewModel(IMatriculaService matriculaService, IAlunoService alunoService)
     {
         _matriculaService = matriculaService;
         _alunoService = alunoService;
         Title = "Detalhes da Matrícula";
     }
+
     [RelayCommand]
     private async Task CancelAsync()
     {
         await Shell.Current.GoToAsync("..");
     }
+
     public async Task InitializeAsync()
     {
         if (MatriculaId > 0)
@@ -78,6 +85,7 @@ public partial class MatriculaViewModel : BaseViewModel
         }
         InicializaTipoRestricoes();
     }
+
     [RelayCommand]
     public async Task LoadMatriculaAsync()
     {
@@ -92,7 +100,6 @@ public partial class MatriculaViewModel : BaseViewModel
             {
                 Matricula = matriculaData;
             }
-
         }
         catch (Exception ex)
         {
@@ -103,6 +110,7 @@ public partial class MatriculaViewModel : BaseViewModel
             IsBusy = false;
         }
     }
+
     [RelayCommand]
     public async Task SaveMatriculaAsync()
     {
@@ -113,7 +121,6 @@ public partial class MatriculaViewModel : BaseViewModel
         try
         {
             IsBusy = true;
-            // Verifica se o CEP existe antes de continuar
 
             var alunoData = await _alunoService.ObterPorIdAsync(Matricula.AlunoMatricula.Id);
             if (alunoData == null)
@@ -126,28 +133,25 @@ public partial class MatriculaViewModel : BaseViewModel
             if (IsEditMode)
             {
                 await _matriculaService.AtualizarAsync(Matricula);
-
-                await Shell.Current.DisplayAlert("Sucesso", "Matricula atualizada com sucesso!", "OK");
-
+                await Shell.Current.DisplayAlert("Sucesso", "Matrícula atualizada com sucesso!", "OK");
             }
             else
             {
                 await _matriculaService.AdicionarAsync(Matricula);
-
-                await Shell.Current.DisplayAlert("Sucesso", "Matricula criada com sucesso!", "OK");
-
+                await Shell.Current.DisplayAlert("Sucesso", "Matrícula criada com sucesso!", "OK");
             }
             await Shell.Current.GoToAsync("..");
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Erro", $"Erro ao salvar matricula: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlert("Erro", $"Erro ao salvar matrícula: {ex.Message}", "OK");
         }
         finally
         {
             IsBusy = false;
         }
     }
+
     [RelayCommand]
     public async Task SearchByCpfAsync()
     {
@@ -157,13 +161,11 @@ public partial class MatriculaViewModel : BaseViewModel
         {
             IsBusy = true;
             var matriculaData = await _matriculaService.ObterPorAlunoCpfAsync(Matricula.AlunoMatricula.Cpf);
-
             if (matriculaData != null)
-
             {
                 Matricula = matriculaData;
                 IsEditMode = true;
-                await Shell.Current.DisplayAlert("Aviso", "Matricula já cadastrado! Dados carregados para edição.", "OK");
+                await Shell.Current.DisplayAlert("Aviso", "Matrícula já cadastrada. Dados carregados para edição.", "OK");
             }
             else
             {
@@ -172,7 +174,7 @@ public partial class MatriculaViewModel : BaseViewModel
                 if (alunoData != null)
                 {
                     Matricula.AlunoMatricula = (AlunoDTO)alunoData;
-                    await Shell.Current.DisplayAlert("Aviso", "Aluno encontrado! Preencha os dados da matrícula.", "OK");
+                    await Shell.Current.DisplayAlert("Aviso", "Aluno encontrado. Preencha os dados da matrícula.", "OK");
                     OnPropertyChanged(nameof(Matricula));
                 }
                 else
@@ -199,7 +201,6 @@ public partial class MatriculaViewModel : BaseViewModel
             string escolha = await Shell.Current.DisplayActionSheet("Origem do arquivo", "Cancelar", null, "Galeria", "Câmera");
             FileResult? result = null;
             if (escolha == "Galeria")
-
             {
                 result = await FilePicker.Default.PickAsync(new PickOptions
                 {
@@ -251,7 +252,7 @@ public partial class MatriculaViewModel : BaseViewModel
         {
             if (matricula.LaudoMedico == null)
             {
-                Shell.Current.DisplayAlert(validationTitle, "Laudo médico é obrigatória.", "OK");
+                Shell.Current.DisplayAlert(validationTitle, "Laudo Médico é obrigatório.", "OK");
                 return false;
             }
         }

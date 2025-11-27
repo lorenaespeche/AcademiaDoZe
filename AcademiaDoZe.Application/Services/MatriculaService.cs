@@ -2,6 +2,9 @@
 using AcademiaDoZe.Application.Interfaces;
 using AcademiaDoZe.Application.Mappings;
 using AcademiaDoZe.Domain.Repositories;
+using AcademiaDoZe.Infrastructure.Data;
+using System.Data;
+using System.Data.Common;
 
 namespace AcademiaDoZe.Application.Services;
 
@@ -93,8 +96,9 @@ public class MatriculaService : IMatriculaService
         throw new NotImplementedException();
     }
 
-    public Task<MatriculaDTO> ObterPorAlunoCpfAsync(string cpf)
+    public async Task<MatriculaDTO> ObterPorAlunoCpfAsync(string cpf)
     {
-        throw new NotImplementedException();
+        var matricula = await _repoFactory().ObterPorAlunoCpf(cpf);
+        return (matricula != null) ? matricula.ToDto() : null!;
     }
 }
